@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Animado</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(270deg, #ff0000, #f3ff00, #003eff);
+            background-size: 400% 400%;
+            animation: fondoAnimado 15s ease infinite;
+        }
+
+        @keyframes fondoAnimado {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #menu-container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            opacity: 0;
+            animation: entradaTitulo 1.5s ease-out forwards;
+        }
+
+        @keyframes entradaTitulo {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        button {
+            margin: 15px;
+            padding: 12px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: entradaBoton 1s ease-out forwards;
+        }
+
+        button:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+        
+        button:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+
+        button:nth-child(3) {
+            animation-delay: 0.9s;
+        }
+
+        @keyframes entradaBoton {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>     
+    <audio id="menu-audio" autoplay loop>
+        <source src="menu.mp3" type="audio/mp3">
+    </audio>
+
+    <div id="menu-container">
+        <h1>minijuego rapido que hice para tic(hola profe)</h1>
+        <button onclick="iniciarJuego()">Iniciar</button>
+        <button onclick="mostrarConfiguracion()">Configuración</button>
+        <button onclick="mostrarExtras()">Extras</button>
+    </div>
+
+    <script>
+        function iniciarJuego() {
+            window.location.href = 'inst1.html';  
+        }
+
+        function mostrarConfiguracion() {
+            alert("no tengo tiempo ni ganas para hacer un menu de configuracion,gracias por leer");
+        }
+
+        function mostrarExtras() {
+            window.location.href = 'extras.html';
+        }
+    </script>
+
+</body>
+</html>

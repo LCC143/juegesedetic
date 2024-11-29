@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minijuego - FNF QTE</title>
+    <style>
+        body {
+            background-color: #2a2a2a;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            margin-top: 20px;
+        }
+        .note {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            background-color: red;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .timer {
+            position: absolute;
+            bottom: 500px;  /* Colocar el temporizador debajo de la tecla */
+            font-size: 18px;
+            color: yellow;
+        }
+        .timer-bar {
+            width: 100%;
+            height: 5px;
+            background-color: #555;
+        }
+        .timer-bar-inner {
+            height: 100%;
+            background-color: green;
+        }
+        .correct-keys-container {
+            position: absolute;
+            top: 10%;  /* Asegura que esté centrado arriba */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);  /* Fondo oscuro semi-transparente */
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            width: 50%;  /* Ajusta el ancho de la barra */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .correct-keys-title {
+            font-size: 20px;
+            color: white;
+            margin-bottom: 5px;
+        }
+        .correct-keys {
+            font-size: 24px;
+            bottom: 1000px;
+            color: lime;
+            font-weight: bold;
+            word-wrap: break-word;  /* Permite que el texto se divida en líneas */
+        }
+        .lives {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: red;
+            font-weight: bold;
+        }
+        .warning-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 50px;
+            color: red;
+            font-weight: bold;
+            opacity: 0;
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-50%, -50%) rotate(5deg); }
+            50% { transform: translate(-50%, -50%) rotate(-5deg); }
+            75% { transform: translate(-50%, -50%) rotate(5deg); }
+            100% { transform: translate(-50%, -50%) rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container"></div>
+<div class="lives" id="lives">Vidas: 5</div>
+<audio id="audio" src="golden.mp3" preload="auto"></audio>
+
+<!-- Temporizador visible -->
+<div id="timer" class="timer">Tiempo: 2:19</div>
+
+<!-- Nueva barra de contraseña -->
+<div class="correct-keys-container">
+    <div class="correct-keys-title">Contraseña:</div>
+    <div id="correct-keys" class="correct-keys"></div>
+</div>
+
+
+<script>
+    const notesData = [];  // Notas que aparecerán
+    let currentLives = 5;  // Vidas restantes
+    let mistakes = 0;  // Contador de fallos
+    const maxMistakes = 5;  // Número máximo de fallos permitidos
+    let correctKeysList = [];  // Array para almacenar las teclas acertadas
+    let activeNotes = [];  // Notas activas que están en pantalla
+    let timer = 139;  // Temporizador para la canción (2:19 minutos)
+    let noteSpeed = 3000;  // Velocidad de aparición de las notas (en ms)
+    let songTime = 0;  // Tiempo transcurrido en la canción
+    let songDuration = 139;  // Duración de la canción en segundos (2:19 minutos)
+    let audio;  // Variable para el audio
+    let countdownTimer = 139;  // Contador invisible de 2:19 minutos (en segundos)
+
+    // Reproducir el audio
+    window.onload = () => {
+        audio = document.getElementById('audio');
+        audio.play(); // Reproducir el audio
+        setInterval(() => {
+            songTime = audio.currentTime;  // Obtener el tiempo actual de la canción
+            document.getElementById('timer').textContent = `Tiempo: ${formatTime(songTime)}`;  // Mostrar el tiempo en formato MM:SS
+        }, 1000); // Actualizar cada segundo
+
+        startCountdown();  // Iniciar el temporizador invisible
+    };
+
+    // Función para formatear el tiempo en minutos y segundos
+    function formatTime(time) {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    // Iniciar el contador invisible de 2:19 minutos
+    function startCountdown() {
+        const interval = setInterval(() => {
+            countdownTimer--;  // Disminuir el contador invisible
+            if (countdownTimer <= 0) {
+                clearInterval(interval);  // Detener el contador cuando llega a 0
+                alert("¡La canción terminó!");
+                window.location.href = "jueg.html";  // Redirigir a la página de Game Over
+            }
+        }, 1000); // Contar cada segundo
+    }
+
+    // Generar teclas aleatorias
+    function randomKey() {
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        return letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+
+    // Generar una nueva tecla en pantalla
+    function spawnNote() {
+        const noteElement = document.createElement('div');
+        const key = randomKey();  // Asignar una tecla aleatoria
+        noteElement.classList.add('note');
+        noteElement.innerText = key;
+
+        // Posicionar la tecla aleatoriamente en la pantalla
+        const left = Math.random() * (window.innerWidth - 100);
+        const top = Math.random() * (window.innerHeight - 100);
+
+        noteElement.style.left = `${left}px`;
+        noteElement.style.top = `${top}px`;
+
+        // Crear el temporizador debajo de la tecla
+        const timerElement = document.createElement('div');
+        timerElement.classList.add('timer');
+        noteElement.appendChild(timerElement);
+
+        const timerBar = document.createElement('div');
+        timerBar.classList.add('timer-bar');
+        const timerBarInner = document.createElement('div');
+        timerBarInner.classList.add('timer-bar-inner');
+        timerBar.appendChild(timerBarInner);
+        noteElement.appendChild(timerBar);
+
+        document.getElementById('game-container').appendChild(noteElement);
+
+        let timeLeft = 5;  // 5 segundos por tecla
+        const interval = setInterval(() => {
+            timeLeft--;
+            timerBarInner.style.width = `${(timeLeft / 5) * 100}%`;
+
+            if (timeLeft <= 0) {
+                clearInterval(interval);  // Detener el temporizador
+                mistakes++;
+                if (mistakes >= maxMistakes) {
+                    alert("¡Has fallado demasiado! Game Over.");
+                    window.location.href = "gameover.html";  // Redirigir a página Game Over
+                }
+                noteElement.remove();  // Eliminar la tecla si se agotó el tiempo
+                activeNotes = activeNotes.filter(note => note.noteElement !== noteElement);  // Eliminarla de las notas activas
+                updateLives();  // Actualizar las vidas
+            }
+        }, 1000);  // Actualizar cada segundo
+
+        // Almacenar la nota activa
+        activeNotes.push({ noteElement, key, interval });
+
+        // Hacer que el jugador pueda clickeando la nota
+        noteElement.addEventListener('click', () => {
+            handleCorrect(noteElement);  // Si hace clic, es un acierto
+        });
+    }
+
+    
+    function adjustNoteSpeed() {
+        if (songTime >= 40 && songTime < 52) {
+            noteSpeed = 1000; 
+        } else if (songTime >= 53 && songTime < 67) {
+            noteSpeed = 500; 
+        } else if (songTime >= 68 && songTime < 74) {
+            noteSpeed = 400; 
+        } else if (songTime >= 75 && songTime < 100) {
+            noteSpeed = 500;
+        } else if (songTime >= 101 && songTime < 120) {
+            noteSpeed = 670; 
+        } else if (songTime >= 121 && songTime < 140) {
+            noteSpeed = 800; 
+        } else if (songTime >= 137 && songTime < 140) {
+            noteSpeed = 10;
+        } else if (songTime >= 140 && songTime < songDuration) {
+            noteSpeed = 1500; 
+        } else {
+            noteSpeed = 2000; 
+        }
+    }
+
+    function handleCorrect(noteElement) {
+        const index = activeNotes.findIndex(n => n.noteElement === noteElement);
+        if (index !== -1) {
+            correctKeysList.push(activeNotes[index].key);
+            updateCorrectKeys();  // Mostrar teclas acertadas
+            activeNotes[index].noteElement.remove();
+            clearInterval(activeNotes[index].interval);
+            activeNotes.splice(index, 1);
+        }
+    }
+
+    // Actualizar las teclas acertadas en pantalla
+    function updateCorrectKeys() {
+        const correctKeysElement = document.getElementById('correct-keys');
+        correctKeysElement.textContent = correctKeysList.join('');
+    }
+
+
+    // Actualizar las vidas
+    function updateLives() {
+        const livesElement = document.getElementById('lives');
+        livesElement.textContent = `Vidas: ${currentLives - mistakes}`;
+    }
+
+    // Verificar si la tecla presionada es la correcta
+    document.addEventListener('keydown', (e) => {
+        const pressedKey = e.key.toUpperCase();  // Convertir la tecla a mayúscula
+        const notesOnScreen = document.querySelectorAll('.note');
+
+        notesOnScreen.forEach(note => {
+            if (note.innerText === pressedKey) {
+                handleCorrect(note);  // El jugador presiona la tecla correcta
+            }
+        });
+
+        // Si la tecla no es correcta, incrementar el contador de fallos
+        if (!notesOnScreen.some(note => note.innerText === pressedKey)) {
+            mistakes++;
+            if (mistakes >= maxMistakes) {
+                alert("¡Has fallado demasiado! Game Over.");
+                window.location.href = "gameover.html";
+            }
+        }
+    });
+
+    // Iniciar el juego
+    function startGame() {
+        const audio = document.getElementById('audio');
+        audio.play();
+
+        gameLoop();  // Iniciar el bucle del juego
+    }
+
+    // Bucle de juego
+    function gameLoop() {
+        adjustNoteSpeed();  // Ajustar la velocidad según el tiempo de la canción
+        spawnNote();  // Crear una nueva tecla aleatoria cada cierto tiempo
+        setTimeout(gameLoop, noteSpeed);  // Generar una nueva tecla según la velocidad ajustada
+    }
+
+    // Iniciar el juego
+    startGame();
+</script>
+
+</body>
+</html>

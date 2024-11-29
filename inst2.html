@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cutscene - FNF QTE</title>
+    <style>
+        body {
+            background-color: #2a2a2a;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #cutscene-text {
+            font-size: 24px;
+            margin-bottom: 20px;
+            animation: fadeInText 2s ease-out;
+        }
+
+        #instructions {
+            display: none;
+            font-size: 20px;
+            color: lime;
+            margin-top: 30px;
+            animation: fadeInText 2s ease-out;
+        }
+
+        #start-button {
+            display: none;
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 20px;
+            color: white;
+            background-color: #32cd32;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #start-button:hover {
+            background-color: #228b22;
+        }
+
+        @keyframes fadeInText {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Textos de la cutscene -->
+<div id="cutscene-text">Conexión Prendida...</div>
+<div id="instructions"></div>
+<!-- Botón para continuar al minijuego -->
+<button id="start-button" onclick="startGame()">Empezar Minijuego</button>
+
+<script>
+    let cutsceneText = document.getElementById("cutscene-text");
+    let instructionsDiv = document.getElementById("instructions");
+    let startButton = document.getElementById("start-button");
+
+    // Función para mostrar el siguiente texto de la cutscene
+    function showText(text, nextFunction) {
+        cutsceneText.innerText = text;
+        setTimeout(nextFunction, 2000); // Esperar 2 segundos antes de mostrar el siguiente texto
+    }
+
+    // Función para mostrar instrucciones y mostrar el botón para continuar
+    function showInstructions() {
+        instructionsDiv.style.display = "block";
+        instructionsDiv.innerText = "Presiona las teclas que aparezcan antes de que se acabe el tiempo.\nNo falles mucho o a casa...";
+        startButton.style.display = "inline-block"; // Mostrar el botón "Empezar Minijuego"
+    }
+
+    // Función para iniciar el minijuego
+    function startGame() {
+        window.location.href = "qte.html"; // Redirigir a la página del minijuego (puedes cambiar la URL a la que sea adecuada)
+    }
+
+    // Simulación de la cutscene
+    setTimeout(() => showText("Introduciendo contraseña de red...", () => {
+        showText("contraseña incorrecta, debe tener entre 2 y 2139012u390 caracteres", () => {
+            showInstructions();  // Mostrar instrucciones después de los mensajes
+        });
+    }), 2000);  // Tiempo antes de mostrar "Introduciendo contraseña"
+</script>
+
+</body>
+</html>

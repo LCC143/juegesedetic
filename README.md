@@ -1,1 +1,1 @@
-# juegesedetic
+# juegotic

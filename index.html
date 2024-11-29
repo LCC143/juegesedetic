@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>profe ponenos 10</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(270deg, #ff2d00, #1fff00, #0032ff, #fff700);
+            background-size: 600% 600%;
+            animation: fondoAnimado 15s ease infinite;
+        }
+        @keyframes fondoAnimado {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        #contenedor-juego {
+            width: 800px;
+            height: 600px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 5px solid #000;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="contenedor-juego">
+        <iframe src="jueg.html"></iframe>
+    </div>
+</body>
+</html>
