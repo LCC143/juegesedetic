@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproductor Musical</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="music-container">
+        <h1>🎶 Selecciona tu canción 🎶</h1>
+        <div class="song-list">
+            <button class="song-button" onclick="playSong('song1.mp3', 'Canción 1')">Canción 1</button>
+            <button class="song-button" onclick="playSong('song2.mp3', 'Canción 2')">Canción 2</button>
+            <button class="song-button" onclick="playSong('song3.mp3', 'Canción 3')">Canción 3</button>
+            <button class="song-button" onclick="playSong('song4.mp3', 'Canción 4')">Canción 4</button>
+        </div>
+        <div class="now-playing" id="nowPlaying">Reproduciendo: Ninguna</div>
+        <audio id="audioPlayer" controls></audio>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
