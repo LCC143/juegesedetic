@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minijuego - Transferencia de Datos</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #2e2e2e;
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            overflow: hidden;
+        }
+
+        #cutscene {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .data {
+            font-size: 32px;
+            color: #1e90ff;
+            margin: 10px;
+            opacity: 0;
+            animation: fadeInData 1s ease-in-out 1s forwards;
+        }
+
+        @keyframes fadeInData {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        #instructions {
+            display: none; /* Inicia oculto */
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-button {
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 18px;
+            color: white;
+            background-color: #32cd32;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .game-button:hover {
+            background-color: #228b22;
+        }
+
+        .game-button:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="cutscene">
+    <!-- Texto sobre la casa y el modem -->
+    <div class="data" id="text-start">Te acabas de comprar un nuevo servicio de internet,pero accidentalmente olvidaste que tu casa es lo suficientemente grande como para que haya zonas que ni siquiera conoces. Tienes que encontrar el modem para conectarte a la red.</div>
+</div>
+
+<div id="instructions">
+    <h2>Instrucciones del Minijuego</h2>
+    <p>Usa las teclas A, S, W, D para moverte por el laberinto y llegar al modem.</p>
+    <p>Evita las paredes y consigue llegar al modem antes de que se acabe el tiempo.</p>
+    <button id="start-button" class="game-button">Iniciar Minijuego</button>
+</div>
+
+<script>
+    // Animación del texto de inicio
+    let textStart = document.getElementById('text-start');  // El texto sobre la casa y el modem
+    let instructions = document.getElementById('instructions');
+    let startButton = document.getElementById('start-button');
+
+    setTimeout(() => {
+        // Muestra el texto de la casa y el modem durante 2 segundos
+        textStart.style.display = 'block';  // Hacemos visible el texto de inicio
+        setTimeout(() => {
+            textStart.style.display = 'none';  // Lo ocultamos después de 2 segundos
+
+            // Después de que el texto desaparece, mostramos las instrucciones
+            instructions.style.display = 'block'; // Mostrar las instrucciones
+        }, 10000); // Mostrar el texto durante 2 segundos
+    }, 500); // Espera de 1 segundo antes de mostrar el texto inicial
+
+    startButton.addEventListener('click', () => {
+        window.location.href = 'extras.html'; // Redirige a la página del juego cuando se presiona el botón
+    });
+</script>
+
+</body>
+</html>
