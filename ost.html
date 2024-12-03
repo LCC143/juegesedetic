@@ -4,20 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reproductor Musical</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e1e2f, #3a3a5f);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .music-container {
+            text-align: center;
+            background: rgba(50, 50, 70, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        .song-button {
+            display: block;
+            width: 250px;
+            margin: 15px auto;
+            padding: 15px;
+            background: #ff6600;
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .song-button:hover {
+            background: #ff4500;
+            transform: scale(1.05);
+        }
+
+        #nowPlaying {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        audio {
+            width: 80%;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="music-container">
         <h1>🎶 Selecciona tu canción 🎶</h1>
         <div class="song-list">
-            <button class="song-button" onclick="playSong('song1.mp3', 'Canción 1')">Canción 1</button>
-            <button class="song-button" onclick="playSong('song2.mp3', 'Canción 2')">Canción 2</button>
-            <button class="song-button" onclick="playSong('song3.mp3', 'Canción 3')">Canción 3</button>
-            <button class="song-button" onclick="playSong('song4.mp3', 'Canción 4')">Canción 4</button>
+            <button class="song-button" onclick="playSong('menu.mp3', 'menu')">Canción 1</button>
+            <button class="song-button" onclick="playSong('golden.mp3', '1er minijuego')">Canción 2</button>
+            <button class="song-button" onclick="playSong('labe.mp3', '2do minijuego')">Canción 3</button>
+            <button class="song-button" onclick="playSong('ost.mp3', 'ost menu')">Canción 4</button>
         </div>
         <div class="now-playing" id="nowPlaying">Reproduciendo: Ninguna</div>
         <audio id="audioPlayer" controls></audio>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        function playSong(songFile, songName) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const nowPlaying = document.getElementById('nowPlaying');
+            
+            audioPlayer.src = songFile; // Cambia la canción
+            audioPlayer.play();          // Inicia la reproducción
+            
+            nowPlaying.textContent = 'Reproduciendo: ' + songName; // Actualiza el indicador
+        }
+    </script>
 </body>
 </html>
