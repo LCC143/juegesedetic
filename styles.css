@@ -1,0 +1,47 @@
+body {
+    background: linear-gradient(135deg, #1e1e2f, #3a3a5f);
+    color: white;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.music-container {
+    text-align: center;
+    background: rgba(50, 50, 70, 0.8);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.song-button {
+    display: block;
+    width: 250px;
+    margin: 15px auto;
+    padding: 15px;
+    background: #ff6600;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.song-button:hover {
+    background: #ff4500;
+    transform: scale(1.05);
+}
+
+#nowPlaying {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+audio {
+    width: 80%;
+    margin-top: 20px;
+}
